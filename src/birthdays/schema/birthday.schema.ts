@@ -1,13 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 import { HydratedDocument } from 'mongoose';
 
 export class Birthdate {
+  @ApiProperty()
   date: number;
 
+  @ApiProperty()
   month: number;
 
+  @ApiProperty()
   year: number;
 
+  @ApiProperty()
   ISODate: Date;
 }
 

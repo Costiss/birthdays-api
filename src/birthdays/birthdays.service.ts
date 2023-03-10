@@ -27,15 +27,16 @@ export class BirthdaysService {
     return this.birthdaysRepository.save(birthday).then(BirthdayDTO.fromBirthday);
   }
 
-  public async getByServer(serverId: string, userId: string): Promise<Birthday> {
+  public async getByServer(serverId: string, userId: string): Promise<BirthdayDTO> {
     const birthday = await this.birthdaysRepository.getByServer(serverId, userId);
     if (!birthday) throw new HttpException('Entity not found', HttpStatus.NOT_FOUND);
 
-    return birthday;
+    return new BirthdayDTO(birthday);
   }
 
-  public async getAllByServer(serverId: string): Promise<Birthday[]> {
-    return this.birthdaysRepository.getAllByServer(serverId);
+  public async getAllByServer(serverId: string): Promise<BirthdayDTO[]> {
+    const birthdays = await this.birthdaysRepository.getAllByServer(serverId);
+    return birthdays.map(BirthdayDTO.fromBirthday);
   }
 
   public async deleteUser(serverId: string, userId: string): Promise<void> {
