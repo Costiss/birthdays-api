@@ -19,7 +19,7 @@ export class BirthdaysService {
       ...Object.assign(this, birthdayDto),
       birthdate: {
         date: getDate(birthdate),
-        month: getMonth(birthdate),
+        month: getMonth(birthdate) + 1,
         year: getYear(birthdate),
         ISODate: birthdate
       }
