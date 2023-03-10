@@ -1,8 +1,12 @@
 {
   "name": "birthday-api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Birthdays API for Discord birthdays BOT",
+  "author": {
+    "email": "gabricostam@gmail.com",
+    "name": "Gabriel Costa Ganassin",
+    "url": "https://github.com/Costiss/birthdays-api"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
