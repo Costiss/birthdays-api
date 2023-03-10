@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { getDate, getMonth, getYear } from 'date-fns';
+import { getDate, getMonth, getYear, startOfDay } from 'date-fns';
 import { BirthdaysRepository } from './birthdays.repository';
 import { BirthdayDTO } from './dto/birthday.dto';
 import { CreateBirthdayDTO } from './dto/create-birthday.dto';
@@ -21,7 +21,7 @@ export class BirthdaysService {
         date: getDate(birthdate),
         month: getMonth(birthdate) + 1,
         year: getYear(birthdate),
-        ISODate: birthdate
+        ISODate: startOfDay(birthdate)
       }
     };
     return this.birthdaysRepository.save(birthday).then(BirthdayDTO.fromBirthday);
