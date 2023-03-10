@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { getDate, getMonth, getYear } from 'date-fns';
 import { BirthdaysRepository } from './birthdays.repository';
+import { BirthdayDTO } from './dto/birthday.dto';
 import { CreateBirthdayDTO } from './dto/create-birthday.dto';
 import { Birthday } from './schema/birthday.schema';
 
@@ -8,19 +9,22 @@ import { Birthday } from './schema/birthday.schema';
 export class BirthdaysService {
   constructor(private readonly birthdaysRepository: BirthdaysRepository) {}
 
-  public async saveBirthday(birthdayDto: CreateBirthdayDTO): Promise<Birthday> {
-    const alreadyExists = this.birthdaysRepository.getByServer(birthdayDto.serverId, birthdayDto.userId);
+  public async saveBirthday(birthdayDto: CreateBirthdayDTO): Promise<BirthdayDTO> {
+    const alreadyExists = await this.birthdaysRepository.getByServer(birthdayDto.serverId, birthdayDto.userId);
     if (alreadyExists) throw new HttpException('You already saved a birthday for this server', HttpStatus.BAD_REQUEST);
+
+    const birthdate = new Date(birthdayDto.birthdate);
+
     const birthday: Birthday = {
       ...Object.assign(this, birthdayDto),
       birthdate: {
-        date: getDate(birthdayDto.birthdate),
-        month: getMonth(birthdayDto.birthdate),
-        year: getYear(birthdayDto.birthdate),
-        ISODate: birthdayDto.birthdate
+        date: getDate(birthdate),
+        month: getMonth(birthdate),
+        year: getYear(birthdate),
+        ISODate: birthdate
       }
     };
-    return this.birthdaysRepository.save(birthday);
+    return this.birthdaysRepository.save(birthday).then(BirthdayDTO.fromBirthday);
   }
 
   public async getByServer(serverId: string, userId: string): Promise<Birthday> {
